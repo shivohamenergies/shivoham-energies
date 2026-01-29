@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shivoham Energies and Solution</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- CORE VARIABLES & RESET --- */
+    :root {
+      --primary: #00897B;   /* Teal */
+      --secondary: #FFC72C; /* Solar Yellow */
+      --dark: #0D1F26;      /* Dark Slate */
+      --light: #F8F9FA;
+      --gray: #6C757D;
+      --text-brand: #0E4D6C; /* Dark Blue for Text */
+      --text-accent: #77A343; /* Green for 'Solution' */
+    }
+    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: var(--dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+      padding-top: 110px; /* Increased slightly for larger header content */
+      background-color: #fefefe;
+    }
+
+    /* --- PRELOADER --- */
+    .preloader {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: white; display: flex; justify-content: center; align-items: center;
+      z-index: 9999; transition: opacity 0.5s ease;
+    }
+    .solar-spinner {
+      width: 60px; height: 60px;
+      border: 5px solid #f8f9fa; border-top: 5px solid var(--primary);
+      border-radius: 50%; animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    /* --- ANIMATIONS --- */
+    .reveal {
+      opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out;
+    }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* --- HEADER --- */
+    header {
+      background-color: rgba(255, 255, 255, 0.98);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      position: fixed; width: 100%; top: 0; z-index: 1000;
+      height: 110px; /* Increased height to accommodate larger logo */
+      display: flex; align-items: center;
+      transition: all 0.3s ease;
+    }
+    .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+    .header-container { display: flex; justify-content: space-between; align-items: center; }
+    
+    /* BRANDING STYLES (Logo + Text) - UPDATED SIZE */
+    .brand-link {
+      display: flex; align-items: center; gap: 15px; text-decoration: none;
+    }
+    .brand-logo-img {
+      height: 85px; /* LARGE LOGO */
+      width: auto; object-fit: contain;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+      transition: transform 0.3s;
+    }
+    .brand-logo-img:hover { transform: scale(1.05); }
+
+    .brand-text-group {
+      display: flex; flex-direction: column; line-height: 1;
+    }
+    .brand-main {
+      font-size: 32px; /* LARGE TEXT */
+      font-weight: 800; 
+      color: var(--text-brand); 
+      letter-spacing: -0.5px;
+    }
+    .brand-sub {
+      font-size: 18px; /* LARGE SUBTEXT */
+      font-weight: 600; 
+      color: var(--text-accent); 
+      letter-spacing: 0.5px;
+      margin-top: 2px;
+    }
+
+    /* Navigation */
+    nav ul { display: flex; list-style: none; gap: 20px; }
+    nav ul li a {
+      text-decoration: none; color: var(--dark); font-weight: 500; font-size: 16px;
+      transition: color 0.3s; display: flex; align-items: center; gap: 8px;
+    }
+    nav ul li a:hover { color: var(--primary); }
+    .nav-cta {
+      background-color: var(--primary); color: white !important;
+      padding: 10px 20px; border-radius: 30px; transition: transform 0.3s, background-color 0.3s;
+    }
+    .nav-cta:hover { background-color: var(--dark) !important; transform: translateY(-2px); }
+    .mobile-menu-btn { display: none; background: none; border: none; font-size: 24px; cursor: pointer; }
+
+    /* --- HERO SECTION (SLIDESHOW) --- */
+    .hero {
+      position: relative; height: 90vh; display: flex; align-items: center;
+      text-align: center; color: white; margin-top: -110px; padding-top: 110px; overflow: hidden;
+    }
+    .hero-slide {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background-size: cover; background-position: center; opacity: 0;
+      transition: opacity 1.5s ease-in-out; z-index: 1;
+    }
+    .hero-slide.active { opacity: 1; }
+    .hero-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); z-index: 2;
+    }
+    .hero-content {
+      position: relative; z-index: 3; max-width: 800px; margin: 0 auto; padding: 20px;
+      animation: fadeInUp 1s ease-out;
+    }
+    .hero h1 { font-size: 48px; margin-bottom: 20px; font-weight: 700; text-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+    .hero p { font-size: 18px; margin-bottom: 30px; opacity: 0.95; }
+    
+    .btn {
+      display: inline-block; padding: 12px 30px; background-color: var(--primary); color: white;
+      border-radius: 50px; text-decoration: none; font-weight: 600; transition: all 0.3s;
+      border: 2px solid var(--primary); cursor: pointer;
+    }
+    .btn:hover { background-color: white; color: var(--primary); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    .btn-outline { background-color: transparent; border-color: white; margin-left: 10px; }
+    .btn-outline:hover { background-color: white; color: var(--dark); }
+
+    /* --- SECTIONS --- */
+    .section { padding: 80px 0; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 36px; color: var(--primary); margin-bottom: 10px; position: relative; display: inline-block; }
+    .section-title h2::after {
+      content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+      width: 60px; height: 3px; background-color: var(--secondary);
+    }
+
+    /* About */
+    .about-content { display: flex; align-items: center; gap: 50px; }
+    .about-img { flex: 1; border-radius: 15px; overflow: hidden; box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+    .about-img img { width: 100%; height: auto; display: block; transition: transform 0.5s; }
+    .about-img:hover img { transform: scale(1.05); }
+    .about-text { flex: 1; }
+    
+    /* Services */
+    .services { background-color: #f4f6f7; }
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+    .service-card {
+      background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      transition: all 0.4s ease;
+    }
+    .service-card:hover { transform: translateY(-15px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    .service-img { height: 220px; overflow: hidden; }
+    .service-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s; }
+    .service-card:hover .service-img img { transform: scale(1.1); }
+    .service-content { padding: 25px; }
+
+    /* Portfolio */
+    .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
+    .project-card {
+      background: white; border-radius: 10px; overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative;
+      transition: transform 0.3s;
+    }
+    .project-card:hover { transform: translateY(-10px); }
+    .project-img { height: 250px; overflow: hidden; }
+    .project-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+    .project-card:hover .project-img img { transform: scale(1.1); }
+    .project-content { padding: 20px; border-bottom: 3px solid var(--primary); }
+
+    /* Stats */
+    .stats {
+      background: linear-gradient(rgba(0,137,123,0.9), rgba(13,31,38,0.9)), url('solar2.jpg');
+      background-size: cover; background-attachment: fixed;
+      color: white; text-align: center; padding: 80px 0;
+    }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+    .stat-box { transition: transform 0.3s; }
+    .stat-box:hover { transform: scale(1.05); }
+    .stat-box h3 { font-size: 48px; font-weight: 700; color: var(--secondary); }
+
+    /* Calculator */
+    .calculator {
+      background: white; padding: 40px; border-radius: 10px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1); max-width: 700px; margin: 0 auto;
+      border-top: 5px solid var(--primary); transition: transform 0.3s;
+    }
+    .calculator:hover { transform: translateY(-5px); }
+    .range-group { margin-bottom: 25px; }
+    .range-group label { display: block; margin-bottom: 10px; font-weight: 600; }
+    .range-group input { width: 100%; cursor: pointer; accent-color: var(--primary); }
+    .savings-display {
+      background: var(--light); padding: 20px; text-align: center; border-radius: 8px; margin-top: 20px;
+      border: 1px solid #eee;
+    }
+    .savings-amount { font-size: 36px; font-weight: 700; color: var(--primary); }
+
+    /* Footer */
+    footer { background-color: var(--dark); color: white; padding: 60px 0 20px; }
+    .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
+    
+    /* Footer Branding */
+    .footer-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; width: fit-content; }
+    .footer-brand img { height: 50px; width: auto; }
+    .footer-brand-text { display: flex; flex-direction: column; line-height: 1; }
+    .footer-main { font-weight: 700; color: white; font-size: 18px; }
+    .footer-sub { font-weight: 500; color: var(--secondary); font-size: 14px; }
+
+    .footer-col h3 { border-bottom: 2px solid var(--primary); padding-bottom: 10px; margin-bottom: 20px; display: inline-block; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li a { color: #ccc; text-decoration: none; transition: 0.3s; }
+    .footer-col ul li a:hover { color: var(--secondary); padding-left: 5px; }
+    .footer-bottom { text-align: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; color: #888; }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+       /* Scale down slightly for laptops/tablets */
+      .brand-main { font-size: 24px; }
+      .brand-sub { font-size: 16px; }
+      .brand-logo-img { height: 70px; }
+    }
+    @media (max-width: 768px) {
+      /* Mobile layout adjustments */
+      .header-container { padding: 0 15px; }
+      nav ul { display: none; position: absolute; top: 110px; left: 0; width: 100%; background: white; flex-direction: column; padding: 20px; text-align: center; box-shadow: 0 5px 10px rgba(0,0,0,0.1); }
+      nav ul.show { display: flex; }
+      .mobile-menu-btn { display: block; }
+      .about-content { flex-direction: column; }
+      .hero h1 { font-size: 32px; }
+      
+      /* Mobile Header Branding Size */
+      .brand-logo-img { height: 50px; }
+      .brand-main { font-size: 18px; }
+      .brand-sub { font-size: 14px; }
+      .brand-link { gap: 10px; }
+    }
+    
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <div class="preloader">
+    <div class="solar-spinner"></div>
+  </div>
+
+  <header>
+    <div class="container header-container">
+      <a href="#home" class="brand-link">
+        <img src="SHIVOHAM ENERGIES Logo.png" alt="Shivoham Energies Logo" class="brand-logo-img">
+        <div class="brand-text-group">
+          <span class="brand-main">Shivoham Energies</span>
+          <span class="brand-sub">and Solution</span>
+        </div>
+      </a>
+      
+      <nav>
+        <ul id="mainMenu">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Projects</a></li>
+          <li><a href="#contact" class="nav-cta">Contact Us</a></li>
+        </ul>
+        <button class="mobile-menu-btn" id="menuToggle"><i class="fas fa-bars"></i></button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" id="home">
+    <div class="hero-slide active" style="background-image: url('generative-ai-solar-panels-on-building-roof-clean-ecological-electricity-at-sunset-renewable-energy-concept-photo.jpg');"></div>
+    <div class="hero-slide" style="background-image: url('solar 6.jpg');"></div>
+    <div class="hero-slide" style="background-image: url('solar1.jpg');"></div>
+    <div class="hero-slide" style="background-image: url('solar 5.webp');"></div>
+    
+    <div class="hero-overlay"></div>
+
+    <div class="hero-content">
+      <h1>Powering the Future with Renewable Energy</h1>
+      <p>Innovative solar solutions for homes, businesses, and agriculture. Reduce your carbon footprint and electricity bills today.</p>
+      <div style="margin-top: 30px;">
+        <a href="#contact" class="btn">Get a Free Quote</a>
+        <a href="#calculator" class="btn btn-outline">Calculate Savings</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="about">
+    <div class="container">
+      <div class="section-title">
+        <h2>About Shivoham Energies</h2>
+        <p>Committed to a greener, cleaner, and sustainable planet.</p>
+      </div>
+      
+      <div class="about-content">
+        <div class="about-img">
+          <img src="hand-holding-tree-growing-on-globe-with-solar-cell-and-turbine-concept-clean-energy-for-save-world-elements-of-this-image-furnished-nasa-free-photo.jpg" alt="Green Energy Concept">
+        </div>
+        <div class="about-text">
+          <h3>Your Trusted Solar Partner</h3>
+          <p>Shivoham Energies and Solution is dedicated to making renewable energy accessible to everyone. We specialize in top-tier solar installations that are robust, efficient, and cost-effective.</p>
+          <p>From small residential setups to large-scale industrial plants, our expert team ensures quality at every step. We believe in "Making a Difference" by empowering communities with self-sufficient energy solutions.</p>
+          
+          <div style="margin-top: 20px; display: flex; gap: 20px;">
+            <div><i class="fas fa-check-circle" style="color: var(--primary);"></i> 10+ Years Experience</div>
+            <div><i class="fas fa-check-circle" style="color: var(--primary);"></i> Certified Experts</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section services reveal" id="services">
+    <div class="container">
+      <div class="section-title">
+        <h2>Our Services</h2>
+        <p>Comprehensive solar solutions tailored to your needs.</p>
+      </div>
+      
+      <div class="services-grid">
+        <div class="service-card">
+          <div class="service-img">
+            <img src="solar 5.webp" alt="Solar Power Plants">
+          </div>
+          <div class="service-content">
+            <h3>Solar Power Plants</h3>
+            <p>Grid-connected and off-grid solutions for factories and commercial buildings. Maximize ROI with idle roof space.</p>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-img">
+            <img src="solar 7.jpg" alt="Solar Street Lighting">
+          </div>
+          <div class="service-content">
+            <h3>Solar Street Lighting</h3>
+            <p>Stand-alone automatic street lighting systems. Perfect for campuses, rural roads, and private properties.</p>
+          </div>
+        </div>
+        
+        <div class="service-card">
+          <div class="service-img">
+            <img src="solar4.webp" alt="Solar Pumping Systems">
+          </div>
+          <div class="service-content">
+            <h3>Solar Water Pumps</h3>
+            <p>Reliable irrigation solutions for farmers. Zero fuel costs and operation during day-time power cuts.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats reveal">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-box">
+          <h3>2MW+</h3>
+          <p>Installed Capacity</p>
+        </div>
+        <div class="stat-box">
+          <h3>300+</h3>
+          <p>Happy Clients</p>
+        </div>
+        <div class="stat-box">
+          <h3>5000+</h3>
+          <p>Pumps Installed</p>
+        </div>
+        <div class="stat-box">
+          <h3>100%</h3>
+          <p>Customer Satisfaction</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="portfolio">
+    <div class="container">
+      <div class="section-title">
+        <h2>Featured Projects</h2>
+        <p>A glimpse of our work across different sectors.</p>
+      </div>
+      
+      <div class="portfolio-grid">
+        <div class="project-card">
+          <div class="project-img">
+            <img src="solar 6.jpg" alt="Industrial Solar Park">
+          </div>
+          <div class="project-content">
+            <h3>Utility Scale Solar Park</h3>
+            <p>Large scale ground-mounted solar installation providing clean energy to the industrial grid.</p>
+          </div>
+        </div>
+        
+        <div class="project-card">
+          <div class="project-img">
+            <img src="solar1.jpg" alt="Rooftop Installation">
+          </div>
+          <div class="project-content">
+            <h3>Commercial Rooftop</h3>
+            <p>Our expert team installing high-efficiency panels for a commercial client to offset operation costs.</p>
+          </div>
+        </div>
+        
+        <div class="project-card">
+          <div class="project-img">
+            <img src="images.jfif" alt="Community Solar">
+          </div>
+          <div class="project-content">
+            <h3>Agricultural & Community</h3>
+            <p>Empowering farmers and rural communities with sustainable energy and greener futures.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="calculator" style="background-color: #f9f9f9;">
+    <div class="container">
+      <div class="section-title">
+        <h2>Savings Calculator</h2>
+        <p>Estimate how much you can save by switching to solar.</p>
+      </div>
+      
+      <div class="calculator">
+        <div class="range-group">
+          <label>Monthly Bill (₹): <span id="bill-val">2000</span></label>
+          <input type="range" id="bill" min="500" max="50000" step="100" value="2000" oninput="calculate()">
+        </div>
+        
+        <div class="savings-display">
+          <p>Estimated Annual Savings</p>
+          <div class="savings-amount">₹<span id="result">19,200</span></div>
+          <p style="font-size: 12px; color: #666;">*Approximate figures based on average tariffs.</p>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+          <a href="#contact" class="btn">Get Exact Quote</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="contact">
+    <div class="container">
+      <div class="section-title">
+        <h2>Contact Us</h2>
+        <p>Ready to switch to solar? Reach out to us today.</p>
+      </div>
+      
+      <div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center;">
+        <div style="flex: 1; min-width: 300px;">
+          <div style="margin-bottom: 30px;">
+            <h4><i class="fas fa-map-marker-alt" style="color: var(--primary); margin-right: 10px;"></i> Address</h4>
+            <p>F-3, Bajaj Galaxy Mall, Canal Road, Chhatrapati Chowk,<br>Nanded, Maharashtra 431605</p>
+          </div>
+          <div style="margin-bottom: 30px;">
+            <h4><i class="fas fa-phone-alt" style="color: var(--primary); margin-right: 10px;"></i> Phone</h4>
+            <p>08007775521 / 09970715244</p>
+          </div>
+          <div style="margin-bottom: 30px;">
+            <h4><i class="fas fa-envelope" style="color: var(--primary); margin-right: 10px;"></i> Email</h4>
+            <p>shivohamenergies@gmail.com</p>
+          </div>
+        </div>
+        
+        <div style="flex: 1; min-width: 300px; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.1);">
+          <form>
+            <div style="margin-bottom: 15px;"><input type="text" placeholder="Your Name" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></div>
+            <div style="margin-bottom: 15px;"><input type="email" placeholder="Email Address" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></div>
+            <div style="margin-bottom: 15px;"><input type="text" placeholder="Phone Number" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></div>
+            <div style="margin-bottom: 15px;"><textarea placeholder="Message" rows="4" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;"></textarea></div>
+            <button type="submit" class="btn" style="width: 100%;">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      <div class="footer-container">
+        <div class="footer-col">
+          <div class="footer-brand">
+             <img src="SHIVOHAM ENERGIES Logo.png" alt="Shivoham Energies">
+             <div class="footer-brand-text">
+                <span class="footer-main">Shivoham Energies</span>
+                <span class="footer-sub">and Solution</span>
+             </div>
+          </div>
+          <p>We provide innovative, reliable and cost-effective solar energy solutions for residential, commercial and industrial applications.</p>
+        </div>
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Services</h3>
+          <ul>
+            <li>Solar Power Plants</li>
+            <li>Solar Street Lights</li>
+            <li>Solar Water Pumps</li>
+            <li>EPC Services</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Shivoham Energies and Solution. All Rights Reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 1. Preloader
+    window.addEventListener('load', () => {
+      document.querySelector('.preloader').style.opacity = '0';
+      setTimeout(() => { document.querySelector('.preloader').style.display = 'none'; }, 500);
+    });
+
+    // 2. Mobile Menu
+    const menuBtn = document.getElementById('menuToggle');
+    const nav = document.getElementById('mainMenu');
+    menuBtn.addEventListener('click', () => {
+      nav.classList.toggle('show');
+    });
+
+    // 3. Calculator Logic
+    function calculate() {
+      const bill = document.getElementById('bill').value;
+      document.getElementById('bill-val').innerText = bill;
+      const savings = Math.floor(bill * 12 * 0.8); // Simple logic
+      document.getElementById('result').innerText = savings.toLocaleString();
+    }
+    calculate();
+
+    // 4. Smooth Scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+        nav.classList.remove('show');
+      });
+    });
+
+    // 5. Scroll Animations (Fade In Up)
+    function reveal() {
+      var reveals = document.querySelectorAll(".reveal");
+      for (var i = 0; i < reveals.length; i++) {
+        var windowHeight = window.innerHeight;
+        var elementTop = reveals[i].getBoundingClientRect().top;
+        var elementVisible = 150;
+        if (elementTop < windowHeight - elementVisible) {
+          reveals[i].classList.add("active");
+        }
+      }
+    }
+    window.addEventListener("scroll", reveal);
+    reveal(); // Trigger once on load
+
+    // 6. Hero Background Slideshow (Changing Photos)
+    let slideIndex = 0;
+    const slides = document.querySelectorAll('.hero-slide');
+    
+    function showSlides() {
+      // Remove active class from all slides
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].classList.remove('active');
+      }
+      
+      // Increment index
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1 }
+      
+      // Add active class to current slide
+      slides[slideIndex - 1].classList.add('active');
+      
+      // Change slide every 5 seconds
+      setTimeout(showSlides, 5000); 
+    }
+    
+    // Start slideshow if slides exist
+    if(slides.length > 0) {
+      showSlides();
+    }
+  </script>
+</body>
+</html>
